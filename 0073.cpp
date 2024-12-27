@@ -73,9 +73,9 @@ public:
                 }
             }
         }
-        for (size_t i = matrix.size() - 1; i > 0; --i)
+        for (size_t i = 1; i < matrix.size(); ++i)
         {
-            for (size_t j = matrix[i].size() - 1; j > 0; --j)
+            for (size_t j = 1; j < matrix[i].size(); ++j)
             {
                 if (matrix[i][0] == 0 || matrix[0][j] == 0)
                 {
