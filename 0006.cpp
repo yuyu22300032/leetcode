@@ -56,33 +56,34 @@ public:
         {
             return s;
         }
-        vector<string> zigzag(numRows);
-        int pos = 0;
-        bool forward = true;
-        for (size_t i = 0; i < s.size(); ++i)
+        int repeat_cnt = numRows * 2 - 2;
+        int idx = 0;
+        string out;
+        while (idx < s.size())
         {
-            zigzag[pos] += s[i];
-            if (forward)
+            out += s[idx];
+            idx += repeat_cnt;
+        }
+        for (int i = 1; i < numRows - 1; ++i)
+        {
+            idx = i;
+            while (idx < s.size())
             {
-                if (++pos == numRows)
+                out += s[idx];
+                idx += repeat_cnt - i - i;
+                if (idx >= s.size())
                 {
-                    forward = false;
-                    pos -= 2;
+                    break;
                 }
-            }
-            else
-            {
-                if (--pos == -1)
-                {
-                    forward = true;
-                    pos = 1;
-                }
+                out += s[idx];
+                idx += i + i;
             }
         }
-        string out;
-        for (vector<string>::iterator it = zigzag.begin(); it != zigzag.end(); ++it)
+        idx = numRows - 1;
+        while (idx < s.size())
         {
-            out += *it;
+            out += s[idx];
+            idx += repeat_cnt;
         }
         return out;
     }
