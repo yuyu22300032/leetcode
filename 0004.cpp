@@ -108,10 +108,6 @@ public:
             {
                 return 0.5 * (nums2[l2] + nums2[l2+1]);
             }
-            else
-            {
-                return 0.5 * (nums1[l1] + nums2[l2]);
-            }
         }
 
         return 0;
