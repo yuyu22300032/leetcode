@@ -47,6 +47,24 @@ Constraints:
 
 class Solution {
 public:
+    bool checkFrontClear(string &p, int pidx)
+    {
+        if (pidx % 2 == 0)
+        {
+            bool clear = true;
+            for (int i = 1; i < pidx; i += 2)
+            {
+                if (p[i] != '*')
+                {
+                    clear = false;
+                    break;
+                }
+            }
+            return clear;
+        }
+        return false;
+    }
+
     bool isMatch(string s, string p) {
         list< pair<int, int> > idxs;
         idxs.push_back(make_pair(s.size() - 1, p.size() - 1));
@@ -74,21 +92,9 @@ public:
                             }
                             if (cur.first == 0)
                             {
-                                if (cur.second % 2 == 0)
+                                if (checkFrontClear(p, cur.second))
                                 {
-                                    bool yuyu = true;
-                                    for (int i = 1; i < cur.second; i += 2)
-                                    {
-                                        if (p[i] != '*')
-                                        {
-                                            yuyu = false;
-                                            break;
-                                        }
-                                    }
-                                    if (yuyu)
-                                    {
-                                        return true;
-                                    }
+                                    return true;
                                 }
                                 break;
                             }
@@ -98,28 +104,9 @@ public:
                     }
                     case '.':
                     {
-                        if (cur.first == 0 && cur.second == 0)
+                        if (cur.first == 0 && checkFrontClear(p, cur.second))
                         {
                             return true;
-                        }
-                        if (cur.first == 0)
-                        {
-                            if (cur.second % 2 == 0)
-                            {
-                                bool yuyu = true;
-                                for (int i = 1; i < cur.second; i+=2)
-                                {
-                                    if (p[i] != '*')
-                                    {
-                                        yuyu = false;
-                                        break;
-                                    }
-                                }
-                                if (yuyu)
-                                {
-                                    return true;
-                                }
-                            }
                         }
                         if (cur.first > 0 && cur.second > 0)
                         {
@@ -133,28 +120,9 @@ public:
                     {
                         if (s[cur.first] == p[cur.second])
                         {
-                            if (cur.first == 0 && cur.second == 0)
+                            if (cur.first == 0 && checkFrontClear(p, cur.second))
                             {
                                 return true;
-                            }
-                            if (cur.first == 0)
-                            {
-                                if (cur.second % 2 == 0)
-                                {
-                                    bool yuyu = true;
-                                    for (int i = 1; i < cur.second; i+=2)
-                                    {
-                                        if (p[i] != '*')
-                                        {
-                                            yuyu = false;
-                                            break;
-                                        }
-                                    }
-                                    if (yuyu)
-                                    {
-                                        return true;
-                                    }
-                                }
                             }
                             if (cur.first > 0 && cur.second > 0)
                             {
