@@ -47,45 +47,18 @@ public:
         vector<string> out;
         for (int i = 0; i < words.size(); ++i)
         {
-            bool is_substr = false;
             for (int j = 0; j < words.size(); ++j)
             {
-                if (i == j)
+                if (i == j || words[i].size() > words[j].size())
                 {
                     continue;
                 }
-                if (words[i].size() > words[j].size())
+                if (words[j].find(words[i]) != string::npos)
                 {
-                    continue;
-                }
-                for (int k = 0; k < words[j].size() - words[i].size() + 1; ++k)
-                {
-                    for (int l = 0; l < words[i].size(); ++l)
-                    {
-                        if (words[j][k+l] != words[i][l])
-                        {
-                            break;
-                        }
-                        if (l == words[i].size() - 1)
-                        {
-                            is_substr = true;
-                            break;
-                        }
-                    }
-                    if (is_substr)
-                    {
-                        break;
-                    }
-                }
-                if (is_substr)
-                {
+                    out.push_back(words[i]);
                     break;
                 }
-            }
-            if (is_substr)
-            {
-                out.push_back(words[i]);
-            }
+            } 
         }
         return out;
     }
