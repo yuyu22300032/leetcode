@@ -81,6 +81,9 @@ public:
                     do {
                         right--;
                     } while (left < right && nums[right] == nums[right+1]);
+                    do {
+                        left++;
+                    } while (left < right && nums[left] == nums[left-1]);
                 }
             }
         }
