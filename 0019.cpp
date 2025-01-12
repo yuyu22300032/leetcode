@@ -52,24 +52,19 @@ Follow up: Could you do this in one pass?
 class Solution {
 public:
     ListNode* removeNthFromEnd(ListNode* head, int n) {
-        int cnt = 1;
         ListNode* cur = head;
-        while (cur->next)
+        vector<ListNode*> vet;
+        while (cur)
         {
-            cnt++;
+            vet.push_back(cur);
             cur = cur->next;
         }
-        cout << cnt << endl;
-        if (n == cnt)
+        if (n == vet.size())
         {
             return head->next;
         }
-        cur = head;
-        for (int i = 1; i < cnt - n; ++i)
-        {
-            cur = cur->next;
-        }
-        cur->next = cur->next->next;
+        
+        vet[vet.size()-1-n]->next = vet[vet.size()-1-n]->next->next;
         return head;
     }
 };
