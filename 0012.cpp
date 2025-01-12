@@ -75,77 +75,42 @@ class Solution {
 public:
     string intToRoman(int num) {
         string out;
-        // 1000s
-        while (num >= 1000)
+        vector<string> table;
+        table.push_back("MUU");
+        table.push_back("CDM");
+        table.push_back("XLC");
+        table.push_back("IVX");
+        int cur = 1;
+        for (int i = 0; i < table.size() - 1; ++ i)
         {
-            out += 'M';
-            num -= 1000;
+            cur *= 10;
         }
 
-        // 100s
-        if (num >= 900)
+        for (int i = 0; i < table.size(); ++i)
         {
-            out += "CM";
-            num -= 900;
-        }
-        else if (num >= 500)
-        {
-            out += 'D';
-            num -= 500;
-        }
-        else if (num >= 400)
-        {
-            out += "CD";
-            num -= 400;
-        }
-        while (num >= 100)
-        {
-            out += 'C';
-            num -= 100;
-        }
-
-        // 10s
-        if (num >= 90)
-        {
-            out += "XC";
-            num -= 90;
-        }
-        else if (num >= 50)
-        {
-            out += 'L';
-            num -= 50;
-        }
-        else if (num >= 40)
-        {
-            out += "XL";
-            num -= 40;
-        }
-        while (num >= 10)
-        {
-            out += 'X';
-            num -= 10;
-        }
-
-        // 1s
-        if (num >= 9)
-        {
-            out += "IX";
-            num -= 9;
-        }
-        else if (num >= 5)
-        {
-            out += 'V';
-            num -= 5;
-        }
-        else if (num >= 4)
-        {
-            out += "IV";
-            num -= 4;
-        }
-        while (num >= 1)
-        {
-            out += 'I';
-            num -= 1;
+            if (num >= cur * 9)
+            {
+                out += table[i][0];
+                out += table[i][2];
+                num -= cur * 9;
+            }
+            else if (num >= cur * 5)
+            {
+                out += table[i][1];
+                num -= cur * 5;
+            }
+            else if (num >= cur * 4)
+            {
+                out += table[i][0];
+                out += table[i][1];
+                num -= cur * 4;
+            }
+            while (num >= cur)
+            {
+                out += table[i][0];
+                num -= cur;
+            }
+            cur /= 10;
         }
 
         return out;
