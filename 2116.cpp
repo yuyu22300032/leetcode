@@ -58,8 +58,9 @@ public:
         {
             return false;
         }
-        list<int> free_idx;
-        list<int> right_idx;
+        vector<int> free_idx;
+        vector<int> right_idx;
+        int cur_free_idx = 0;
         for (int i = 0; i < s.size(); ++i)
         {
             if (locked[i] == '0')
@@ -78,15 +79,15 @@ public:
                 right_idx.pop_back();
                 continue;
             }
-            if (free_idx.size() > 0)
+            if (free_idx.size() > cur_free_idx)
             {
-                free_idx.pop_front();
+                cur_free_idx++;
                 continue;
             }
             return false;
         }
 
-        if (right_idx.size() > free_idx.size())
+        if (right_idx.size() > (free_idx.size() - cur_free_idx))
         {
             return false;
         }
