@@ -53,7 +53,7 @@ public:
         vector<int> char_table(26, 0);
         for (int i = 0; i < s.size(); ++i)
         {
-            char_table[s[i] - 'a'] = char_table[s[i] - 'a'] % 2 + 1;
+            char_table[s[i] - 'a'] = (char_table[s[i] - 'a'] & 0x1) + 1;
         }
         int out = 0;
         for (int i = 0; i < char_table.size(); ++i)
