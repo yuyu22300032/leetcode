@@ -45,8 +45,7 @@ Constraints:
 class Solution {
 public:
     vector<int> findThePrefixCommonArray(vector<int>& A, vector<int>& B) {
-        vector<bool> unseen_a(A.size()+1, false);
-        vector<bool> unseen_b(B.size()+1, false);
+        vector<bool> unseen(A.size()+1, false);
         vector<int> out(A.size(), 0);
         int cur = 0;
         for (int i = 0; i < A.size(); ++i)
@@ -56,23 +55,21 @@ public:
                 out[i] = ++cur;
                 continue;
             }
-            if (unseen_a[B[i]])
+            if (unseen[B[i]])
             {
-                unseen_a[B[i]] = false;
                 cur++;
             }
             else
             {
-                unseen_b[B[i]] = true;
+                unseen[B[i]] = true;
             }
-            if (unseen_b[A[i]])
+            if (unseen[A[i]])
             {
-                unseen_b[A[i]] = false;
                 cur++;
             }
             else
             {
-                unseen_a[A[i]] = true;
+                unseen[A[i]] = true;
             }
             out[i] = cur;
         }
