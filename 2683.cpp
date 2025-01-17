@@ -60,11 +60,11 @@ public:
         {
             derived[0] ^= derived[i];
         }
-        if (derived[0] > 0)
+        if (derived[0] == 0)
         {
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 };
 
