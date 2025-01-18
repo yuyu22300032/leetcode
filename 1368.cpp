@@ -66,12 +66,12 @@ public:
     int minCost(vector<vector<int>>& grid) {
         vector<vector<int>> costs(grid.size(), vector<int>(grid[0].size(), INT_MAX));
         costs[0][0] = 0;
-        queue<Node> searching;
-        searching.push(Node(0, 0, 0));
+        multimap<int, Node> searching;
+        searching.insert(pair<int, Node>{0, Node(0, 0, 0)});
         while (searching.size() > 0)
         {
-            Node cur = searching.front();
-            searching.pop();
+            Node cur = searching.begin()->second;
+            searching.erase(searching.begin());
             if (cur.j + 1 < grid[0].size())
             {
                 int new_cost = cur.cost;
@@ -82,7 +82,7 @@ public:
                 if (new_cost < costs[cur.i][cur.j+1])
                 {
                     costs[cur.i][cur.j+1] = new_cost;
-                    searching.push(Node(new_cost, cur.i, cur.j+1));
+                    searching.insert(pair<int, Node>{new_cost, Node(new_cost, cur.i, cur.j+1)});
                 }
             }
             if (cur.j - 1 >= 0)
@@ -95,7 +95,7 @@ public:
                 if (new_cost < costs[cur.i][cur.j-1])
                 {
                     costs[cur.i][cur.j-1] = new_cost;
-                    searching.push(Node(new_cost, cur.i, cur.j-1));
+                    searching.insert(pair<int, Node>{new_cost, Node(new_cost, cur.i, cur.j-1)});
                 }
             }
             if (cur.i + 1 < grid.size())
@@ -108,7 +108,7 @@ public:
                 if (new_cost < costs[cur.i+1][cur.j])
                 {
                     costs[cur.i+1][cur.j] = new_cost;
-                    searching.push(Node(new_cost, cur.i+1, cur.j));
+                    searching.insert(pair<int, Node>{new_cost, Node(new_cost, cur.i+1, cur.j)});
                 }
             }
             if (cur.i - 1 >= 0)
@@ -121,7 +121,7 @@ public:
                 if (new_cost < costs[cur.i-1][cur.j])
                 {
                     costs[cur.i-1][cur.j] = new_cost;
-                    searching.push(Node(new_cost, cur.i-1, cur.j));
+                    searching.insert(pair<int, Node>{new_cost, Node(new_cost, cur.i-1, cur.j)});
                 }
             }
         }
