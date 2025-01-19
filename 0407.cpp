@@ -34,37 +34,22 @@ Constraints:
 
 class Solution {
 public:
-    struct Pos {
-        int height;
-        int x;
-        int y;
-
-        Pos(int _height, int _x, int _y)
-        : height(_height)
-        , x(_x)
-        , y(_y) {}
-
-        bool operator<(const Pos& _other) const {
-            return height < _other.height;
-        }
-    };
-
     int trapRainWater(vector<vector<int>>& heightMap)
     {
         vector<vector<bool>> searched(heightMap.size(), vector<bool>(heightMap[0].size(), false));
-        priority_queue<Pos> bound;
+        multimap<int, pair<int, int>> bound;  // {height, {x, y}}
 
         for (int i = 0; i < heightMap.size(); i++)
         {
-            bound.push(Pos(-heightMap[i][0], i, 0));
-            bound.push(Pos(-heightMap[i][heightMap[0].size() - 1], i, heightMap[0].size() - 1));
+            bound.insert(pair<int, pair<int, int>>(heightMap[i][0], pair<int, int>(i, 0)));
+            bound.insert(pair<int, pair<int, int>>(heightMap[i][heightMap[0].size() - 1], pair<int, int>(i, heightMap[0].size() - 1)));
             searched[i][0] = true;
             searched[i][heightMap[0].size() - 1] = true;
         }
         for (int i = 0; i < heightMap[0].size(); i++)
         {
-            bound.push(Pos(-heightMap[0][i], 0, i));
-            bound.push(Pos(-heightMap[heightMap.size() - 1][i], heightMap.size() - 1, i));
+            bound.insert(pair<int, pair<int, int>>(heightMap[0][i], pair<int, int>(0, i)));
+            bound.insert(pair<int, pair<int, int>>(heightMap[heightMap.size() - 1][i], pair<int, int>(heightMap.size() - 1, i)));
             searched[0][i] = true;
             searched[heightMap.size() - 1][i] = true;
         }
@@ -72,15 +57,17 @@ public:
         int out = 0;
         while (! bound.empty())
         {
-            Pos cur = bound.top();
-            bound.pop();
-            int min_height = -cur.height;
+            multimap<int, pair<int, int>>::iterator it = bound.begin();
+            int cur_x = it->second.first;
+            int cur_y = it->second.second;
+            int min_height = it->first;
+            bound.erase(it);
             int mod_x[4] = {0, 0, -1, 1};
             int mod_y[4] = {-1, 1, 0, 0};
             for (int i = 0; i < 4; i++)
             {
-                int new_x = cur.x + mod_x[i];
-                int new_y = cur.y + mod_y[i];
+                int new_x = cur_x + mod_x[i];
+                int new_y = cur_y + mod_y[i];
                 if (new_x < 0 || new_x >= heightMap.size() || new_y < 0 || new_y >= heightMap[0].size())
                 {
                     continue;
@@ -92,11 +79,11 @@ public:
 
                 if (heightMap[new_x][new_y] < min_height) {
                     out += min_height - heightMap[new_x][new_y];
-                    bound.push(Pos(-min_height, new_x, new_y));
+                    bound.insert(pair<int, pair<int, int>>(min_height, pair<int, int>(new_x, new_y)));
                 }
                 else
                 {
-                    bound.push(Pos(-heightMap[new_x][new_y], new_x, new_y));
+                    bound.insert(pair<int, pair<int, int>>(heightMap[new_x][new_y], pair<int, int>(new_x, new_y)));
                 }
                 searched[new_x][new_y] = true;
             }
