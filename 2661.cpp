@@ -45,29 +45,28 @@ Constraints:
 class Solution {
 public:
     int firstCompleteIndex(vector<int>& arr, vector<vector<int>>& mat) {
-        vector<int> row_idx(arr.size());
-        vector<int> col_idx(arr.size());
+        vector<int> row_idx(arr.size() + 1);
+        vector<int> col_idx(arr.size() + 1);
         for (int i = 0; i < mat.size(); ++i)
         {
             for (int j = 0; j < mat[i].size(); ++j)
             {
-                row_idx[mat[i][j]-1] = i;
-                col_idx[mat[i][j]-1] = j;
+                row_idx[mat[i][j]] = i;
+                col_idx[mat[i][j]] = j;
             }
         }
         vector<int> row_cnt(mat.size(), 0);
         vector<int> col_cnt(mat[0].size(), 0);
         for (int i = 0; i < arr.size(); ++i)
         {
-            row_cnt[row_idx[arr[i]-1]] += 1;
-            col_cnt[col_idx[arr[i]-1]] += 1;
-            if (row_cnt[row_idx[arr[i]-1]] == mat[0].size() || col_cnt[col_idx[arr[i]-1]] == mat.size())
+            if (row_cnt[row_idx[arr[i]]] == mat[0].size() - 1 || col_cnt[col_idx[arr[i]]] == mat.size() - 1)
             {
                 return i;
             }
+            row_cnt[row_idx[arr[i]]] += 1;
+            col_cnt[col_idx[arr[i]]] += 1;
         }
         return 0;
     }
 };
-
 
