@@ -45,22 +45,23 @@ Constraints:
 class Solution {
 public:
     int firstCompleteIndex(vector<int>& arr, vector<vector<int>>& mat) {
-        unordered_map<int, pair<int, int>> search;
+        vector<int> row_idx(arr.size());
+        vector<int> col_idx(arr.size());
         for (int i = 0; i < mat.size(); ++i)
         {
             for (int j = 0; j < mat[i].size(); ++j)
             {
-                search.insert(pair<int, pair<int, int>>(mat[i][j], pair<int, int>(i, j)));
+                row_idx[mat[i][j]-1] = i;
+                col_idx[mat[i][j]-1] = j;
             }
         }
         vector<int> row_cnt(mat.size(), 0);
         vector<int> col_cnt(mat[0].size(), 0);
         for (int i = 0; i < arr.size(); ++i)
         {
-            unordered_map<int, pair<int, int>>::iterator cur = search.find(arr[i]);
-            row_cnt[cur->second.first] += 1;
-            col_cnt[cur->second.second] += 1;
-            if (row_cnt[cur->second.first] == mat[0].size() || col_cnt[cur->second.second] == mat.size())
+            row_cnt[row_idx[arr[i]-1]] += 1;
+            col_cnt[col_idx[arr[i]-1]] += 1;
+            if (row_cnt[row_idx[arr[i]-1]] == mat[0].size() || col_cnt[col_idx[arr[i]-1]] == mat.size())
             {
                 return i;
             }
