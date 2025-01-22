@@ -55,7 +55,8 @@ class Solution {
 public:
     vector<vector<int>> highestPeak(vector<vector<int>>& isWater) {
         vector<vector<int>> out(isWater.size(), vector<int>(isWater[0].size(), -1));
-        queue<pair<int, int>> searching;
+        vector<pair<int, int>> searching;
+        int search_idx = 0;
         for (int i = 0; i < isWater.size(); ++i)
         {
             for (int j = 0; j < isWater[i].size(); ++j)
@@ -65,27 +66,27 @@ public:
                     out[i][j] = 0;
                     if (i > 0)
                     {
-                        searching.push(pair<int, int>(i - 1, j));
+                        searching.push_back(pair<int, int>(i - 1, j));
                     }
                     if (i < isWater.size() - 1)
                     {
-                        searching.push(pair<int, int>(i + 1, j));
+                        searching.push_back(pair<int, int>(i + 1, j));
                     }
                     if (j > 0)
                     {
-                        searching.push(pair<int, int>(i, j - 1));
+                        searching.push_back(pair<int, int>(i, j - 1));
                     }
                     if (j < isWater[0].size() - 1)
                     {
-                        searching.push(pair<int, int>(i, j + 1));
+                        searching.push_back(pair<int, int>(i, j + 1));
                     }
                 }
             }
         }
-        while (! searching.empty())
+        while (search_idx < searching.size())
         {
-            pair<int, int> cur = searching.front();
-            searching.pop();
+            pair<int, int> cur = searching[search_idx];
+            search_idx++;
             if (out[cur.first][cur.second] != -1)
             {
                 continue;
@@ -95,7 +96,7 @@ public:
             {
                 if (out[cur.first - 1][cur.second] == -1)
                 {
-                    searching.push(pair<int, int>(cur.first - 1, cur.second));
+                    searching.push_back(pair<int, int>(cur.first - 1, cur.second));
                 }
                 else
                 {
@@ -106,7 +107,7 @@ public:
             {
                 if (out[cur.first + 1][cur.second] == -1)
                 {
-                    searching.push(pair<int, int>(cur.first + 1, cur.second));
+                    searching.push_back(pair<int, int>(cur.first + 1, cur.second));
                 }
                 else
                 {
@@ -117,7 +118,7 @@ public:
             {
                 if (out[cur.first][cur.second - 1] == -1)
                 {
-                    searching.push(pair<int, int>(cur.first, cur.second - 1));
+                    searching.push_back(pair<int, int>(cur.first, cur.second - 1));
                 }
                 else
                 {
@@ -128,7 +129,7 @@ public:
             {
                 if (out[cur.first][cur.second + 1] == -1)
                 {
-                    searching.push(pair<int, int>(cur.first, cur.second + 1));
+                    searching.push_back(pair<int, int>(cur.first, cur.second + 1));
                 }
                 else
                 {
