@@ -58,23 +58,18 @@ public:
         source.insert(idx);
         for (int i = 0; i < graph[idx].size(); ++i)
         {
-            if (source.count(graph[idx][i]) > 0)
+            if (source.count(graph[idx][i]) > 0 || ! safeNode(graph, graph[idx][i], source, safe, unsafe))
             {
+                source.erase(idx);
                 unsafe[idx] = true;
                 return false;
             }
-            if (safeNode(graph, graph[idx][i], source, safe, unsafe))
-            {
-                continue;
-            }
-            source.erase(idx);
-            unsafe[idx] = true;
-            return false;
         }
         source.erase(idx);
         safe[idx] = true;
         return true;
     }
+
     vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
         set<int> source;
         vector<bool> safe(graph.size(), false);
