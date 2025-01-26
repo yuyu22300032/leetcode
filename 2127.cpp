@@ -80,7 +80,6 @@ public:
         {
             fav[favorite[i]].push_back(i);
         }
-        int max_two_chain = 0;
         for (vector<pair<int, int>>::iterator it = pairs.begin(); it != pairs.end(); ++it)
         {
             int chain1 = 1;
@@ -124,7 +123,7 @@ public:
                     search.push(pair<int, int>(fav[cur.first][i], cur.second + 1));
                 }
             }
-            max_two_chain += chain1 + chain2;
+            out += chain1 + chain2;
         }
 
         for (int i = 0; i < favorite.size(); ++i)
@@ -134,28 +133,33 @@ public:
                 continue;
             }
             int cur = i;
-            vector<bool> search(favorite.size(), false);
-            while (! search[cur] && ! searched[cur])
+            set<int> search;
+            while (search.count(cur) == 0 && ! searched[cur])
             {
-                search[cur] = true;
-                searched[cur] = true;
+                search.insert(cur);
                 cur = favorite[cur];
             }
-            if (! search[cur])
+            
+            for (set<int>::iterator it = search.begin(); it != search.end(); ++it)
+            {
+                searched[*it] = true;
+            }
+            if (search.count(cur) == 0)
             {
                 continue;
             }
-            set<int> cycle;
-            while (cycle.count(cur) == 0)
+            int src = cur;
+            int cycle_size = 1;
+            cur = favorite[cur];
+            while (src != cur)
             {
-                cycle.insert(cur);
+                cycle_size++;
                 cur = favorite[cur];
             }
-            int cycle_size = cycle.size();
             out = max(out, cycle_size);
         }
 
-        return max(max_two_chain, out);
+        return out;
     }
 };
 
