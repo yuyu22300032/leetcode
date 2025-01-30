@@ -121,7 +121,7 @@ public:
             source[source2] = source1;
         }
 
-        vector<int> depths(n + 1, 0);
+        depth.assign(depth.size(), 0);
         for (int cur = 1; cur <= n; cur++)
         {
             int cur_depth = getDepth(graph, cur, n);
@@ -130,13 +130,13 @@ public:
                 return -1;
             }
             int root = getRoot(cur, source);
-            depths[root] = max(depths[root], cur_depth);
+            depth[root] = max(depth[root], cur_depth);
         }
 
         int out = 0;
-        for (int i = 0; i < depths.size(); ++i)
+        for (int i = 0; i < depth.size(); ++i)
         {
-            out += depths[i];
+            out += depth[i];
         }
         return out;
     }    
