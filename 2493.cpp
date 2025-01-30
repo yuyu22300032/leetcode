@@ -61,28 +61,6 @@ public:
         return node;
     }
 
-    void mergeTree(int node1, int node2, vector<int> &source, vector<int> &depth)
-    {
-        int source1 = getRoot(node1, source);
-        int source2 = getRoot(node2, source);
-
-        if (source1 == source2)
-        {
-            return;
-        }
-
-        if (depth[source1] == depth[source2])
-        {
-            depth[source1] += 1;
-        }
-        else if (depth[source1] < depth[source2])
-        {
-            swap(source1, source2);
-        }
-
-        source[source2] = source1;
-    }
-
     int getDepth(vector<vector<int>> &graph, int root, int n)
     {
         queue<int> search;
@@ -124,10 +102,26 @@ public:
         {
             graph[edges[i][0]].push_back(edges[i][1]);
             graph[edges[i][1]].push_back(edges[i][0]);
-            mergeTree(edges[i][0], edges[i][1], source, depth);
+            int source1 = getRoot(edges[i][0], source);
+            int source2 = getRoot(edges[i][1], source);
+            if (source1 == source2)
+            {
+                continue;
+            }
+
+            if (depth[source1] == depth[source2])
+            {
+                depth[source1] += 1;
+            }
+            else if (depth[source1] < depth[source2])
+            {
+                swap(source1, source2);
+            }
+
+            source[source2] = source1;
         }
 
-        unordered_map<int, int> depths;
+        vector<int> depths(n + 1, 0);
         for (int cur = 1; cur <= n; cur++)
         {
             int cur_depth = getDepth(graph, cur, n);
@@ -136,21 +130,13 @@ public:
                 return -1;
             }
             int root = getRoot(cur, source);
-            unordered_map<int, int>::iterator it = depths.find(root);
-            if (it == depths.end())
-            {
-                depths.insert(pair<int, int>(root, cur_depth));
-            }
-            else
-            {
-                it->second = max(it->second, cur_depth);
-            }
+            depths[root] = max(depths[root], cur_depth);
         }
 
         int out = 0;
-        for (unordered_map<int, int>::iterator it = depths.begin(); it != depths.end(); ++it)
+        for (int i = 0; i < depths.size(); ++i)
         {
-            out += it->second;
+            out += depths[i];
         }
         return out;
     }    
