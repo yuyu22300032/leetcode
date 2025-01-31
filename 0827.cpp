@@ -46,49 +46,43 @@ public:
     int largestIsland(vector<vector<int>>& grid) {
         int x_diff[4] = {0, 0, 1, -1};
         int y_diff[4] = {1, -1, 0, 0};
-        vector<vector<int>> islands(grid.size(), vector<int>(grid[0].size(), -1));
         vector<int> island_size;
         for (int i = 0; i < grid.size(); ++i)
         {
             for (int j = 0; j < grid[i].size(); ++j)
             {
-                if (islands[i][j] != -1 || grid[i][j] == 0)
+                if (grid[i][j] == 1)
                 {
-                    continue;
-                }
-                int cur_cnt = 1;
-                int sidx = 0;
-                islands[i][j] = island_size.size();
-                vector<pair<int, int>> search;
-                search.push_back(pair<int, int>(i, j));
-                while (sidx < search.size())
-                {
-                    for (int k = 0; k < 4; ++k)
+                    int cur_cnt = 1;
+                    int sidx = 0;
+                    grid[i][j] = island_size.size() + 2;
+                    vector<pair<int, int>> search;
+                    search.push_back(pair<int, int>(i, j));
+                    while (sidx < search.size())
                     {
-                        int new_x = search[sidx].second + x_diff[k];
-                        if (new_x < 0 || new_x >= grid[0].size())
+                        for (int k = 0; k < 4; ++k)
                         {
-                            continue;
+                            int new_x = search[sidx].second + x_diff[k];
+                            if (new_x < 0 || new_x >= grid[0].size())
+                            {
+                                continue;
+                            }
+                            int new_y = search[sidx].first + y_diff[k];
+                            if (new_y < 0 || new_y >= grid.size())
+                            {
+                                continue;
+                            }
+                            if (grid[new_y][new_x] == 1)
+                            {
+                                cur_cnt++;
+                                grid[new_y][new_x] = island_size.size() + 2;
+                                search.push_back(pair<int, int>(new_y, new_x));
+                            }
                         }
-                        int new_y = search[sidx].first + y_diff[k];
-                        if (new_y < 0 || new_y >= grid.size())
-                        {
-                            continue;
-                        }
-                        if (islands[new_y][new_x] != -1)
-                        {
-                            continue;
-                        }
-                        if (grid[new_y][new_x] == 1)
-                        {
-                            cur_cnt++;
-                            islands[new_y][new_x] = island_size.size();
-                            search.push_back(pair<int, int>(new_y, new_x));
-                        }
+                        sidx++;
                     }
-                    sidx++;
+                    island_size.push_back(cur_cnt);
                 }
-                island_size.push_back(cur_cnt);
             }
         }
         int out = 0;
@@ -111,14 +105,14 @@ public:
                         {
                             continue;
                         }
-                        island_idx.insert(islands[new_y][new_x]);
+                        island_idx.insert(grid[new_y][new_x]);
                     }
                     int cur_cnt = 1;
                     for (set<int>::iterator it = island_idx.begin(); it != island_idx.end(); ++it)
                     {
-                        if (*it != -1)
+                        if (*it > 1)
                         {
-                            cur_cnt += island_size[*it];
+                            cur_cnt += island_size[*it - 2];
                         }
                     }
                     out = max(cur_cnt, out);
