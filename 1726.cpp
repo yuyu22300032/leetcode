@@ -40,13 +40,13 @@ Constraints:
 class Solution {
 public:
     int tupleSameProduct(vector<int>& nums) {
-        map<int, int> ptable;
+        unordered_map<int, int> ptable;
         for (int i = 0; i < nums.size(); ++i)
         {
             for (int j = i + 1; j < nums.size(); ++j)
             {
                 int p = nums[i] * nums[j];
-                map<int, int>::iterator it = ptable.find(p);
+                unordered_map<int, int>::iterator it = ptable.find(p);
                 if (it == ptable.end())
                 {
                     ptable.insert(pair<int, int>(p, 1));
@@ -58,7 +58,7 @@ public:
             }
         }
         int out = 0;
-        for (map<int, int>::iterator it = ptable.begin(); it != ptable.end(); ++it)
+        for (unordered_map<int, int>::iterator it = ptable.begin(); it != ptable.end(); ++it)
         {
             if (it->second == 1)
             {
