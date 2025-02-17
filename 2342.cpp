@@ -37,40 +37,67 @@ Constraints:
 
 class Solution {
 public:
-    int maximumSum(vector<int>& nums) {
-        unordered_map<int, pair<int, int>> dsum;
-        int out = -1;
-        for (int i = 0; i < nums.size(); ++i)
+    struct numPair {
+        int big_num;
+        int small_num;
+
+        numPair(int num)
         {
-            int cur_dsum = 0;
-            int cur = nums[i];
-            while (cur > 0)
+            big_num = num;
+            small_num = 0;
+        }
+
+        bool update(int num)
+        {
+            if (num <= small_num)
             {
-                cur_dsum += cur % 10;
-                cur /= 10;
+                return false;
             }
-            unordered_map<int, pair<int, int>>::iterator it = dsum.find(cur_dsum);
-            if (it == dsum.end())
+            if (num >= big_num)
             {
-                dsum.insert(pair<int, pair<int, int>>(cur_dsum, pair<int, int>(nums[i], 0)));
+                small_num = big_num;
+                big_num = num;
             }
             else
             {
-                if (it->second.first > it->second.second)
+                small_num = num;
+            }
+            return true;
+        }
+
+        int getSum()
+        {
+            return big_num + small_num;
+        }
+    };
+
+    int getDigitSum(int num)
+    {
+        int digit_sum = 0;
+        while (num > 0)
+        {
+            digit_sum += num % 10;
+            num /= 10;
+        }
+        return digit_sum;
+    }
+
+    int maximumSum(vector<int>& nums) {
+        unordered_map<int, numPair> dsum;
+        int out = -1;
+        for (int i = 0; i < nums.size(); ++i)
+        {
+            int cur_dsum = getDigitSum(nums[i]);
+            unordered_map<int, numPair>::iterator it = dsum.find(cur_dsum);
+            if (it == dsum.end())
+            {
+                dsum.insert(pair<int, numPair>(cur_dsum, numPair(nums[i])));
+            }
+            else
+            {
+                if (it->second.update(nums[i]))
                 {
-                    if (nums[i] > it->second.second)
-                    {
-                        it->second.second = nums[i];
-                        out = max(out, nums[i] + it->second.first);
-                    }
-                }
-                else
-                {
-                    if (nums[i] > it->second.first)
-                    {
-                        it->second.first = nums[i];
-                        out = max(out, nums[i] + it->second.second);
-                    }
+                    out = max(out, it->second.getSum());
                 }
             }
         }
