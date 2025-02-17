@@ -38,7 +38,7 @@ Constraints:
 class Solution {
 public:
     int maximumSum(vector<int>& nums) {
-        map<int, pair<int, int>> dsum;
+        unordered_map<int, pair<int, int>> dsum;
         int out = -1;
         for (int i = 0; i < nums.size(); ++i)
         {
@@ -49,7 +49,7 @@ public:
                 cur_dsum += cur % 10;
                 cur /= 10;
             }
-            map<int, pair<int, int>>::iterator it = dsum.find(cur_dsum);
+            unordered_map<int, pair<int, int>>::iterator it = dsum.find(cur_dsum);
             if (it == dsum.end())
             {
                 dsum.insert(pair<int, pair<int, int>>(cur_dsum, pair<int, int>(nums[i], 0)));
