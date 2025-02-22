@@ -77,13 +77,10 @@ public:
         }
         nodes.push_back(pair<int, int>(cur_depth, stoi(val_str)));
     }
+
     TreeNode* recoverFromPreorder(string traversal) {
         vector<pair<int, int>> nodes;
         parse_string(traversal, nodes);
-        for (int i = 0; i < nodes.size(); ++i)
-        {
-            cout << nodes[i].first << ", " << nodes[i].second << endl;
-        }
         TreeNode* out = new TreeNode();
         out->val = nodes[0].second;
         vector<TreeNode*> path;
