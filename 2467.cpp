@@ -98,11 +98,11 @@ public:
         }
 
         // create node graph
-        vector<set<int>> node_graph(n + 1);
+        vector<vector<int>> node_graph(n + 1);
         for (int i = 0; i < edges.size(); ++i)
         {
-            node_graph[edges[i][0]].insert(edges[i][1]);
-            node_graph[edges[i][1]].insert(edges[i][0]);
+            node_graph[edges[i][0]].push_back(edges[i][1]);
+            node_graph[edges[i][1]].push_back(edges[i][0]);
         }
 
         // dfs for bob to find optimal path
@@ -125,11 +125,11 @@ public:
                 {
                     break;
                 }
-                for (set<int>::iterator it = node_graph[cur.node].begin(); it != node_graph[cur.node].end(); ++it)
+                for (int i = 0; i < node_graph[cur.node].size(); ++i)
                 {
-                    if (! visited[*it])
+                    if (! visited[node_graph[cur.node][i]])
                     {
-                        bob_search.push(bobSearch(*it, cur.depth + 1));
+                        bob_search.push(bobSearch(node_graph[cur.node][i], cur.depth + 1));
                     }
                 }
             }
@@ -164,16 +164,15 @@ public:
                 {
                     cur_income += amount[cur.node];
                 }
-                bool is_leaf_node = true;
-                for (set<int>::iterator it = node_graph[cur.node].begin(); it != node_graph[cur.node].end(); ++it)
+                for (int i = 0; i < node_graph[cur.node].size(); ++i)
                 {
-                    if (! visited[*it])
+                    if (! visited[node_graph[cur.node][i]])
                     {
-                        is_leaf_node = false;
-                        alice_search.push(aliceSearch(*it, cur.depth + 1, cur_income));
+                        alice_search.push(aliceSearch(node_graph[cur.node][i], cur.depth + 1, cur_income));
                     }
                 }
-                if (is_leaf_node)
+                // alice not allowed to stay at node 0
+                if (cur.node != 0 && node_graph[cur.node].size() == 1)
                 {
                     out = max(out, cur_income);
                 }
