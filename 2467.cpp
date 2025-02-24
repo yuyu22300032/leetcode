@@ -164,7 +164,6 @@ public:
                 {
                     cur_income += amount[cur.node];
                 }
-                amount[cur.node] = 0;
                 bool is_leaf_node = true;
                 for (set<int>::iterator it = node_graph[cur.node].begin(); it != node_graph[cur.node].end(); ++it)
                 {
