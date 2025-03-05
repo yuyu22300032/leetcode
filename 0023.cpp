@@ -58,48 +58,40 @@ Constraints:
  * };
  */
  class Solution {
-    struct Wrapper {
-        ListNode* node;
-
-        Wrapper(ListNode* _node)
-        : node(_node) { ; }
-    };
     struct Compare {
-        // compiler did not allow pointer directly
-        // bool operator()(const ListNode* node1, const ListNode* node2) const {return true}
-        bool operator()(const Wrapper node1, const Wrapper node2) const {
-            return node1.node->val > node2.node->val;
+        bool operator()(const ListNode* node1, const ListNode* node2) const {
+            return node1->val > node2->val;
         }
     };
 public:
     ListNode* mergeKLists(vector<ListNode*>& lists) {
-        std::priority_queue<Wrapper, vector<Wrapper>, Compare> prio_queue;
+        std::priority_queue<ListNode*, vector<ListNode*>, Compare> prio_queue;
         for (int i = 0; i < lists.size(); ++i)
         {
             if (lists[i])
             {
-                prio_queue.push(Wrapper(lists[i]));
+                prio_queue.push(lists[i]);
             }
         }
         if (prio_queue.empty())
         {
             return nullptr;
         }
-        ListNode* out = prio_queue.top().node;
+        ListNode* out = prio_queue.top();
         prio_queue.pop();
         ListNode* cur = out;
         if (cur->next)
         {
-            prio_queue.push(Wrapper(cur->next));
+            prio_queue.push(cur->next);
         }
         while (! prio_queue.empty())
         {
-            cur->next = prio_queue.top().node;
+            cur->next = prio_queue.top();
             cur = cur->next;
             prio_queue.pop();
             if (cur->next)
             {
-                prio_queue.push(Wrapper(cur->next));
+                prio_queue.push(cur->next);
             }
         }
         return out;
