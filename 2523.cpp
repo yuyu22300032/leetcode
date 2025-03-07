@@ -44,7 +44,8 @@ public:
         vector<int> out(2, -1);
         vector<bool> is_prime(right, true);
         is_prime[0] = false;
-        for (int i = 2; i <= right; i++)
+        int check_bound = pow(right, 0.5) + 1;
+        for (int i = 2; i <= check_bound; i++)
         {
             if (is_prime[i - 1])
             {
