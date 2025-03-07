@@ -49,7 +49,7 @@ public:
         {
             if (is_prime[i - 1])
             {
-                for (int j = 2 * i; j <= right; j += i)
+                for (int j = i * i; j <= right; j += i)
                 {
                     is_prime[j - 1] = false;
                 }
