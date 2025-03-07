@@ -44,29 +44,32 @@ public:
         vector<int> out(2, -1);
         vector<bool> is_prime(right, true);
         is_prime[0] = false;
-        int check_bound = pow(right, 0.5) + 1;
-        for (int i = 2; i <= check_bound; i++)
+        for (int i = 2; i <= right; i++)
         {
             if (is_prime[i - 1])
             {
+                if (i * i > right)
+                {
+                    break;
+                }
                 for (int j = i * i; j <= right; j += i)
                 {
                     is_prime[j - 1] = false;
                 }
             }
         }
-        int min_diff = right - left + 1;
-        optional<int> prev_prime;
+        int min_diff = INT_MAX;
+        int prev_prime = 0;
         for (int i = left; i <= right; i++)
         {
             if (is_prime[i - 1])
             {
-                if (prev_prime)
+                if (prev_prime != 0)
                 {
-                    int cur_diff = i - prev_prime.value();
+                    int cur_diff = i - prev_prime;
                     if (cur_diff < min_diff)
                     {
-                        out[0] = prev_prime.value();
+                        out[0] = prev_prime;
                         out[1] = i;
                         min_diff = cur_diff;
                     }
