@@ -40,82 +40,73 @@ Constraints:
 
 class Solution {
 public:
-    int findIndex(int cur_idx, set<int>& a, set<int>& b)
-    {
-        set<int>::iterator ait = a.lower_bound(cur_idx);
-        if (ait == a.end())
-        {
-            return -1;
-        }
-        set<int>::iterator bit = b.lower_bound(cur_idx);
-        if (bit == b.end())
-        {
-            return -1;
-        }
-        return max(*ait, *bit);
-    }
     int numberOfSubstrings(string s) {
-        set<int> a_idx;
-        set<int> b_idx;
-        set<int> c_idx;
-        for (int i = 0; i < s.size(); ++i)
+        vector<int> a_idx(s.size());
+        vector<int> b_idx(s.size());
+        vector<int> c_idx(s.size());
+        int next_a = s.size();
+        int next_b = s.size();
+        int next_c = s.size();
+        for (int i = s.size() - 1; i >= 0; --i)
         {
             switch (s[i])
             {
                 case 'a':
                 {
-                    a_idx.insert(i);
+                    next_a = i;
                     break;
                 }
                 case 'b':
                 {
-                    b_idx.insert(i);
+                    next_b = i;
                     break;
                 }
                 case 'c':
                 {
-                    c_idx.insert(i);
+                    next_c = i;
                     break;
                 }
                 default:
                 {
-                    // should never get here
+                    // never get here
                     break;
                 }
             }
+            a_idx[i] = next_a;
+            b_idx[i] = next_b;
+            c_idx[i] = next_c;
         }
         int out = 0;
         for (int i = 0; i < s.size(); ++i)
         {
-            int idx = 0;
+            int idx;
             switch (s[i])
             {
                 case 'a':
                 {
-                    idx = findIndex(i, b_idx, c_idx);
+                    idx = max(b_idx[i], c_idx[i]);
                     break;
                 }
                 case 'b':
                 {
-                    idx = findIndex(i, a_idx, c_idx);
+                    idx = max(a_idx[i], c_idx[i]);
                     break;
                 }
                 case 'c':
                 {
-                    idx = findIndex(i, a_idx, b_idx);
+                    idx = max(a_idx[i], b_idx[i]);
                     break;
                 }
                 default:
                 {
-                    // should never get here
+                    // never get here
                     break;
                 }
             }
-            if (idx == -1)
+            if (idx < s.size())
             {
-                break;
+                out += s.size() - idx;
             }
-            out += s.size() - idx;
         }
         return out;
     }
