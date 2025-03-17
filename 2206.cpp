@@ -44,20 +44,19 @@ Constraints:
 class Solution {
 public:
     bool divideArray(vector<int>& nums) {
-        unordered_set<int> alone_nums;
+        vector<bool> pairs(500, false);
         for (int i = 0; i < nums.size(); i++)
         {
-            unordered_set<int>::iterator it = alone_nums.find(nums[i]);
-            if (it == alone_nums.end())
+            pairs[nums[i]] = ! pairs[nums[i]];
+        }
+        for (int i = 0; i < pairs.size(); i++)
+        {
+            if (pairs[i])
             {
-                alone_nums.insert(nums[i]);
-            }
-            else
-            {
-                alone_nums.erase(it);
+                return false;
             }
         }
-        return alone_nums.empty();
+        return true;
     }
 };
 
