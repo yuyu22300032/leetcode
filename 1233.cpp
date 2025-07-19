@@ -46,33 +46,26 @@ Constraints:
 class Solution {
 public:
     vector<string> removeSubfolders(vector<string>& folder) {
-        set<string> sorted_folders;
-        for (int i = 0; i < folder.size(); i++) {
-            sorted_folders.insert(folder[i]);
-        }
+        sort(folder.begin(), folder.end());
         vector<string> out;
-        set<string>::iterator it = sorted_folders.begin();
-        out.push_back(*it);
-        it++;
-        while (it != sorted_folders.end()) {
-            cout << *it << endl;
+        out.push_back(folder[0]);
+        for (int i = 1; i < folder.size(); i++) {
             bool is_subfolder = false;
-            for (int i = 0; i < out.size(); i++) {
-                if (it->size() <= out[i].size()) {
+            for (int j = 0; j < out.size(); j++) {
+                if (folder[i].size() <= out[j].size()) {
                     continue;
                 }
-                if (it->compare(0, out[i].size(), out[i]) != 0) {
+                if (folder[i].compare(0, out[j].size(), out[j]) != 0) {
                     continue;
                 }
-                if ((*it)[out[i].size()] == '/') {
+                if (folder[i][out[j].size()] == '/') {
                     is_subfolder = true;
                     break;
                 }
             }
             if (! is_subfolder) {
-                out.push_back(*it);
+                out.push_back(folder[i]);
             }
-            ++it;
         }
         return out;
     }
