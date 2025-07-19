@@ -48,23 +48,22 @@ public:
     vector<string> removeSubfolders(vector<string>& folder) {
         sort(folder.begin(), folder.end());
         vector<string> out;
+        unordered_set<string> folder_set;
         out.push_back(folder[0]);
+        folder_set.insert(folder[0]);
         for (int i = 1; i < folder.size(); i++) {
             bool is_subfolder = false;
-            for (int j = 0; j < out.size(); j++) {
-                if (folder[i].size() <= out[j].size()) {
-                    continue;
-                }
-                if (folder[i].compare(0, out[j].size(), out[j]) != 0) {
-                    continue;
-                }
-                if (folder[i][out[j].size()] == '/') {
-                    is_subfolder = true;
-                    break;
+            for (int j = 1; j < folder[i].size(); j++) {
+                if (folder[i][j] == '/') {
+                    if (folder_set.count(folder[i].substr(0, j)) > 0) {
+                        is_subfolder = true;
+                        break;
+                    }
                 }
             }
             if (! is_subfolder) {
                 out.push_back(folder[i]);
+                folder_set.insert(folder[i]);
             }
         }
         return out;
