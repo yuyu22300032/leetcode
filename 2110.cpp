@@ -52,11 +52,9 @@ public:
         for (int i = 1; i < prices.size(); i++) {
             if (prices[i] + 1 == prices[i - 1]) {
                 cur++;
+                out += cur;
             } else {
-                while (cur > 0) {
-                    out += cur;
-                    cur--;
-                }
+                cur = 0;
             }
         }
         return out;
