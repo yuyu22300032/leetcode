@@ -58,7 +58,7 @@ Constraints:
 class Solution {
 public:
     long long maximumProfit(vector<int>& prices, int k) {
-        vector<vector<long long>> profits(k + 1, vector<long long>(3, 0)); // profits at day d with i transactions (3 state: none, buying, shorting) 
+        vector<vector<long long>> profits(k + 1, vector<long long>(3, 0)); // current cash at day d with max i transactions (3 state: none, buying, shorting) 
         for (int i = 1; i < k + 1; i++) {
             profits[i][1] = -prices[0];
             profits[i][2] = prices[0];
