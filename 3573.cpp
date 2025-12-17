@@ -58,18 +58,20 @@ Constraints:
 class Solution {
 public:
     long long maximumProfit(vector<int>& prices, int k) {
-        vector<vector<vector<long long>>> dp(prices.size(), vector<vector<long long>>(k + 1, vector<long long>(3, 0))); // prices * k + 1 * 3
-        for (int j = 1; j < k + 1; j++) {
-            dp[0][j][1] = prices[0];
-            dp[0][j][2] = -prices[0];
+        vector<vector<long long>> profits(k + 1, vector<long long>(3, 0)); // profits at day d with i transactions (3 state: none, buying, shorting) 
+        for (int i = 1; i < k + 1; i++) {
+            profits[i][1] = -prices[0];
+            profits[i][2] = prices[0];
         }
-        for (int i = 1; i < prices.size(); i++) {
-            for (int j = 1; j < k + 1; j++) {
-                dp[i][j][0] = max(dp[i-1][j][0], max(dp[i-1][j][1] - prices[i], dp[i-1][j][2] + prices[i]));
-                dp[i][j][1] = max(dp[i-1][j][1], dp[i-1][j-1][0] + prices[i]);
-                dp[i][j][2] = max(dp[i-1][j][2], dp[i-1][j-1][0] - prices[i]);
+
+        for (int d = 1; d < prices.size(); d++) {
+            // go through from most transactions
+            for (int i = k; i > 0; i--) {
+                profits[i][0] = max(profits[i][0], max(profits[i][1] + prices[d], profits[i][2] - prices[d]));
+                profits[i][1] = max(profits[i][1], profits[i-1][0] - prices[d]);
+                profits[i][2] = max(profits[i][2], profits[i-1][0] + prices[d]);
             }
         }
-        return dp[prices.size()-1][k][0];
+        return profits[k][0];
     }
 };
