@@ -46,7 +46,7 @@ Constraints:
 class Solution {
 public:
     int maxTwoEvents(vector<vector<int>>& events) {
-        map<int, int> start_time_map;
+        map<int, int> start_time_map; // max val since time
         for (int i = 0; i < events.size(); i++) {
             start_time_map[events[i][0]] = max(start_time_map[events[i][0]], events[i][2]);
         }
@@ -55,10 +55,11 @@ public:
             max_val = max(max_val, sit->second);
             sit->second = max_val;
         }
-        map<int, int> end_time_map;
+        map<int, int> end_time_map; // sort events on end time
         for (int i = 0; i < events.size(); i++) {
             end_time_map[events[i][1]] = max(end_time_map[events[i][1]], events[i][2]);
         }
+        // max_val is already max val from single event
         map<int, int>::iterator it = start_time_map.begin();
         for (map<int, int>::iterator eit = end_time_map.begin(); eit != end_time_map.end(); eit++) {
             while (it != start_time_map.end()) {
