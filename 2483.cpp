@@ -57,29 +57,25 @@ Constraints:
 class Solution {
 public:
     int bestClosingTime(string customers) {
-        vector<int> no_customers(customers.size() + 1, 0); // sum of no customers before i hour
+        int has_customers_cnt = 0;
+        for (int i = 0; i < customers.size(); i++) {
+            if (customers[i] == 'Y') {
+                has_customers_cnt++;
+            }
+        }
+        int min_penalty_idx = 0;
+        int min_penalty = has_customers_cnt;
         int no_customers_cnt = 0;
         for (int i = 0; i < customers.size(); i++) {
             if (customers[i] == 'N') {
                 no_customers_cnt++;
+            } else {
+                has_customers_cnt--;
             }
-            no_customers[i + 1] = no_customers_cnt;
-        }
-        vector<int> has_customers(customers.size() + 1, 0); // sum of has customers after i hour
-        int has_customers_cnt = 0;
-        for (int i = customers.size() - 1; i >= 0; i--) {
-            if (customers[i] == 'Y') {
-                has_customers_cnt++;
-            }
-            has_customers[i] = has_customers_cnt;
-        }
-        int min_penalty_idx = 0;
-        int min_penalty = customers.size();
-        for (int i = 0; i < no_customers.size(); i++) {
-            int cur_penalty = no_customers[i] + has_customers[i];
+            int cur_penalty = no_customers_cnt + has_customers_cnt;
             if (cur_penalty < min_penalty) {
                 min_penalty = cur_penalty;
-                min_penalty_idx = i;
+                min_penalty_idx = i + 1;
             }
         }
         return min_penalty_idx;
