@@ -123,6 +123,9 @@ public:
                 right = mid;
             }
         }
-        return left - 1;
+        if (right == cells.size()) {
+            return right;
+        }
+        return right - 1;
     }
 };
