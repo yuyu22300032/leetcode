@@ -38,25 +38,23 @@ Constraints:
 */
 
 class Solution {
+    int xorVec(vector<int>& nums) {
+        int out = 0;
+        for (int i = 0; i < nums.size(); i++) {
+            out ^= nums[i];
+        }
+        return out;
+    }
 public:
     int xorAllNums(vector<int>& nums1, vector<int>& nums2) {
         int out = 0;
-        if (nums1.size() % 2 == 1)
-        {
-            for (int i = 0; i < nums2.size(); ++i)
-            {
-                out ^= nums2[i];
-            }
+        if (nums1.size() % 2 == 1) {
+            out = xorVec(nums2);
         }
-        if (nums2.size() % 2 == 1)
-        {
-            for (int i = 0; i < nums1.size(); ++i)
-            {
-                out ^= nums1[i];
-            }
+        if (nums2.size() % 2 == 1) {
+            out ^= xorVec(nums1);
         }
         return out;
     }
 };
-
 
