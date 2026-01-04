@@ -39,19 +39,30 @@ Constraints:
 */
 
 class Solution {
-    int bestScore(vector<int>& nums, int left, int right) {
+    int getCacheKey(int left, int right) {
+        return left * 100 + right;
+    }
+    int bestScore(vector<int>& nums, int left, int right, unordered_map<int, int>& cache) {
         if (left == right) {
             return nums[left];
         }
-        int left_score = nums[left] - bestScore(nums, left + 1, right);
-        int right_score = nums[right] - bestScore(nums, left, right - 1);
-        return max(left_score, right_score);
+        int key = getCacheKey(left, right);
+        unordered_map<int, int>::iterator it = cache.find(key);
+        if (it != cache.end()) {
+            return it->second;
+        }
+        int left_score = nums[left] - bestScore(nums, left + 1, right, cache);
+        int right_score = nums[right] - bestScore(nums, left, right - 1, cache);
+        int best = max(left_score, right_score);
+        cache[key] = best;
+        return best;
     }
 public:
     bool predictTheWinner(vector<int>& nums) {
         if (nums.size() == 0) {
             return true;
         }
-        return bestScore(nums, 0, nums.size() - 1) >= 0;
+        unordered_map<int, int> cache;
+        return bestScore(nums, 0, nums.size() - 1, cache) >= 0;
     }
 };
