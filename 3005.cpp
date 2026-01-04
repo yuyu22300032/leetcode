@@ -39,20 +39,15 @@ Constraints:
 class Solution {
 public:
     int maxFrequencyElements(vector<int>& nums) {
-        int max_freq = 1;
-        unordered_map<int, int> nums_freq;
+        vector<int> freq(101, 0);
+        int max_freq = 0;
         for (int i = 0; i < nums.size(); i++) {
-            unordered_map<int, int>::iterator it = nums_freq.find(nums[i]);
-            if (it == nums_freq.end()) {
-                nums_freq.insert(pair<int, int>(nums[i], 1));
-            } else {
-                it->second += 1;
-                max_freq = max(max_freq, it->second);
-            }
+            freq[nums[i]] += 1;
+            max_freq = max(max_freq, freq[nums[i]]);
         }
         int out = 0;
-        for (unordered_map<int, int>::iterator it = nums_freq.begin(); it != nums_freq.end(); it++) {
-            if (it->second == max_freq) {
+        for (int i = 0; i < freq.size(); i++) {
+            if (freq[i] == max_freq) {
                 out += max_freq;
             }
         }
