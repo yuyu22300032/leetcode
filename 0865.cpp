@@ -60,10 +60,21 @@ Note: This question is the same as 1123: https://leetcode.com/problems/lowest-co
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
 class Solution {
 public:
     TreeNode* subtreeWithAllDeepest(TreeNode* root) {
-        vector<TreeNode*> deepest_nodes;
+        list<TreeNode*> deepest_nodes;
         unordered_map<TreeNode*, TreeNode*> r_map;
         queue<TreeNode*> search;
         search.push(root);
@@ -84,21 +95,22 @@ public:
                 }
             }
         }
-        while (true) {
-            bool all_same = true;
-            for (int i = 1; i < deepest_nodes.size(); i++) {
-                if (deepest_nodes[i] != deepest_nodes[i - 1]) {
-                    all_same = false;
-                    break;
+        while (deepest_nodes.size() > 1) {
+            for (list<TreeNode*>::iterator it = deepest_nodes.begin(); it != deepest_nodes.end(); it++) {
+                *it = r_map[*it];
+            }
+            list<TreeNode*>::iterator it = deepest_nodes.begin();
+            list<TreeNode*>::iterator prev = deepest_nodes.begin();
+            it++;
+            while (it != deepest_nodes.end()) {
+                if (*it == *prev) {
+                    it = deepest_nodes.erase(it);
+                } else {
+                    prev = it;
+                    it++;
                 }
             }
-            if (all_same) {
-                return deepest_nodes[0];
-            }
-            for (int i = 0; i < deepest_nodes.size(); i++) {
-                deepest_nodes[i] = r_map[deepest_nodes[i]];
-            }
         }
-        return nullptr;
+        return deepest_nodes.front();
     }
 };
