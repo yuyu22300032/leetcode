@@ -39,22 +39,14 @@ Constraints:
 class Solution {
 public:
     int minimumDeleteSum(string s1, string s2) {
-        vector<vector<int>> table(s1.size(), vector<int>(s2.size(), 0));
+        vector<vector<int>> table(s1.size() + 1, vector<int>(s2.size() + 1, 0));
+        // find highest score subsquence
         for (int i = 0; i < s1.size(); i++) {
             for (int j = 0; j < s2.size(); j++) {
                 if (s1[i] == s2[j]) {
-                    table[i][j] = s1[i];
-                    if (i > 0 && j > 0) {
-                        table[i][j] += table[i-1][j-1];
-                    }
+                    table[i + 1][j + 1] = s1[i] + table[i][j];
                 } else {
-                    if (i > 0 && j > 0) {
-                        table[i][j] = max(table[i-1][j], table[i][j-1]);
-                    } else if (i > 0) {
-                        table[i][j] = table[i-1][j];
-                    } else if (j > 0) {
-                        table[i][j] = table[i][j-1];
-                    }
+                    table[i + 1][j + 1] = max(table[i][j+1], table[i+1][j]);
                 }
             }
         }
