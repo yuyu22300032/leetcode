@@ -46,21 +46,24 @@ Constraints:
 class Solution {
 public:
     int longestCommonPrefix(vector<int>& arr1, vector<int>& arr2) {
-        unordered_set<string> prefixs;
+        unordered_set<int> prefixs;
         for (int i = 0; i < arr1.size(); i++) {
-            string cur = to_string(arr1[i]);
-            for (int j = 1; j <= cur.size(); j++) {
-                prefixs.insert(cur.substr(0, j));
+            int cur = arr1[i];
+            while (cur > 0) {
+                prefixs.insert(cur);
+                cur /= 10;
             }
         }
         int out = 0;
         for (int i = 0; i < arr2.size(); i++) {
-            string cur = to_string(arr2[i]);
-            // only search longer prefix
-            for (int j = out + 1; j <= cur.size(); j++) {
-                if (prefixs.count(cur.substr(0, j)) > 0) {
-                    out = j;
+            int cur = arr2[i];
+            while (cur > 0) {
+                if (prefixs.count(cur) > 0) {
+                    int cur_len = to_string(cur).size();
+                    out = max(out, cur_len);
+                    break;
                 }
+                cur /= 10;
             }
         }
         return out;
