@@ -59,12 +59,12 @@ public:
                 }
                 out = max(out, table[i][j]);
                 int rec_row = table[i][j];
-                for (int k = i - 1; k >= 0; k--) {
+                for (int k = i + 1; k < table.size(); k++) {
                     if (table[k][j] == 0) {
                         break;
                     }
                     rec_row = min(table[k][j], rec_row);
-                    out = max(out, rec_row * (i - k + 1));
+                    out = max(out, rec_row * (k - i + 1));
                 }
             }
         }
