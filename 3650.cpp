@@ -65,17 +65,20 @@ public:
         vector<int> costToNode(n, INT_MAX);
         costToNode[0] = 0;
         vector<vector<pair<int, int>>> nodeEdges = move(convertNodeEdges(n, edges));
-        queue<int> searching;
-        searching.push(0);
+        priority_queue<pair<int, int>> searching; // <cost, node>
+        searching.push(pair<int, int>{0, 0});
         while (!searching.empty()) {
-            int cur = searching.front();
+            if ((-searching.top().first) >= costToNode.back()) {
+                break;
+            }
+            int cur = searching.top().second;
             searching.pop();
             for (int i = 0; i < nodeEdges[cur].size(); i++) {
                 int cost = costToNode[cur] + nodeEdges[cur][i].second;
                 int node = nodeEdges[cur][i].first;
                 if (cost < costToNode[node]) {
                     costToNode[node] = cost;
-                    searching.push(node);
+                    searching.push(pair<int, int>{-cost, node});
                 }
             }
         }
