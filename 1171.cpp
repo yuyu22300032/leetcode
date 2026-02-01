@@ -55,49 +55,20 @@ public:
         ListNode* out = head;
         ListNode* cur = head;
         while (cur != nullptr) {
-            bool curRemoved = false;
-            if (cur->val == 0) {
-                curRemoved = true;
-                if (sumsfromNode.size() == 0) {
-                    out = cur->next;
-                } else {
-                    sumsfromNode.back().second->next = cur->next;
-                }
-            } else {
-                for (int i = 0; i < sumsfromNode.size(); i++) {
-                    if ((sumsfromNode[i].first + cur->val) != 0) {
-                        continue;
-                    }
-                    // sum from node[i] to cur node equals 0
-                    curRemoved = true;
-                    // no prev node, need to update head
-                    if (i == 0) {
-                        out = cur->next;
-                        sumsfromNode.clear();
-                        break;
-                    }
-                    for (int j = 0; j < i; j++) {
-                        sumsfromNode[j].first -= cur->val;
-                    }
-                    while (i < sumsfromNode.size()) {
-                        sumsfromNode.pop_back();
-                    }
-                    ListNode* prevNode = sumsfromNode[i - 1].second;
-                    prevNode->next = cur->next;
-                    break;
-                }
-            }
-            if (curRemoved) {
-                for (int i = 0; i < sumsfromNode.size(); i++) {
-                    sumsfromNode[i].first += cur->val * 2;
-                }
-                cur = cur->next;
-                continue;
-            }
+            sumsfromNode.push_back(pair<int, ListNode*>(0, cur));
             for (int i = 0; i < sumsfromNode.size(); i++) {
                 sumsfromNode[i].first += cur->val;
+                if (sumsfromNode[i].first == 0) {
+                    if (i == 0) {
+                        // no prev node, need to update head
+                        out = cur->next;
+                        sumsfromNode.clear();
+                    } else {
+                        sumsfromNode.resize(i);
+                        sumsfromNode[i - 1].second->next = cur->next;
+                    }
+                }
             }
-            sumsfromNode.push_back(pair<int, ListNode*>(cur->val, cur));
             cur = cur->next;
         }
         return out;
