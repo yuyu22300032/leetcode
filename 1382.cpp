@@ -42,28 +42,45 @@ Constraints:
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
 class Solution {
-    TreeNode* constructBST(const vector<int>& values, const int strIdx, const int endIdx) {
+    static bool compareNodeValues(const TreeNode* a, const TreeNode* b) {
+        return a->val < b->val;
+    }
+    TreeNode* constructBST(const vector<TreeNode*>& nodes, const int strIdx, const int endIdx) {
         int mid = (strIdx + endIdx) / 2;
-        TreeNode* node = new(TreeNode);
-        node->val = values[mid];
+        TreeNode* cur = nodes[mid];
         if (strIdx < mid) {
-            node->left = constructBST(values, strIdx, mid - 1);
+            cur->left = constructBST(nodes, strIdx, mid - 1);
+        } else {
+            cur->left = nullptr;
         }
         if (endIdx > mid) {
-            node->right = constructBST(values, mid + 1, endIdx);
+            cur->right = constructBST(nodes, mid + 1, endIdx);
+        } else {
+            cur->right = nullptr;
         }
-        return node;
+        return cur;
     }
 public:
     TreeNode* balanceBST(TreeNode* root) {
-        vector<int> values;
+        vector<TreeNode*> nodes;
         queue<TreeNode*> search;
         search.push(root);
         while (!search.empty()) {
             TreeNode* cur = search.front();
             search.pop();
-            values.push_back(cur->val);
+            nodes.push_back(cur);
             if (cur->left) {
                 search.push(cur->left);
             }
@@ -71,7 +88,7 @@ public:
                 search.push(cur->right);
             }
         }
-        sort(values.begin(), values.end());
-        return constructBST(values, 0, values.size() - 1);
+        sort(nodes.begin(), nodes.end(), compareNodeValues);
+        return constructBST(nodes, 0, nodes.size() - 1);
     }
 };
