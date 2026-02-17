@@ -40,30 +40,56 @@ Constraints:
 */
 
 class Solution {
+    vector<string> generateHours(int ledCnt) {
+        switch (ledCnt) {
+            case 0:
+                return {"0:"};
+            case 1:
+                return {"1:", "2:", "4:", "8:"};
+            case 2:
+                return {"3:", "5:", "6:", "9:", "10:"};
+            case 3:
+                return {"7:", "11:"};
+            default:
+                break;
+        }
+        return vector<string>{};
+    }
+    vector<string> generateMinutes(int ledCnt) {
+        switch (ledCnt) {
+            case 0:
+                return {"00"};
+            case 1:
+                return {"01", "02", "04", "08", "16", "32"};
+            case 2:
+                return {"03", "05", "06", "09", "10", "12", "17", "18", "20", "24", "33", "34", "36", "40", "48"};
+            case 3:
+                return {"07", "11", "13", "14", "19", "21", "22", "25", "26", "28", "35", "37", "38", "41", "42", "44", "49", "50", "52", "56"};
+            case 4:
+                return {"15", "23", "27", "29", "30", "39", "43", "45", "46", "51", "53", "54", "57", "58"};
+            case 5:
+                return {"31", "47", "55", "59"};
+            default:
+                break;
+        }
+        return vector<string>{};
+    }
 public:
     vector<string> readBinaryWatch(int turnedOn) {
         vector<string> out;
-        const vector<vector<string>> hours{{"0:"},
-                                           {"1:", "2:", "4:", "8:"},
-                                           {"3:", "5:", "6:", "9:", "10:"},
-                                           {"7:", "11:"}};
-        const vector<vector<string>> minutes{{"00"},
-                                             {"01", "02", "04", "08", "16", "32"},
-                                             {"03", "05", "06", "09", "10", "12", "17", "18", "20", "24", "33", "34", "36", "40", "48"},
-                                             {"07", "11", "13", "14", "19", "21", "22", "25", "26", "28", "35", "37", "38", "41", "42", "44", "49", "50", "52", "56"},
-                                             {"15", "23", "27", "29", "30", "39", "43", "45", "46", "51", "53", "54", "57", "58"},
-                                             {"31", "47", "55", "59"}};
         for (int hourLedCnt = 0; hourLedCnt <= turnedOn; hourLedCnt++) {
-            if (hourLedCnt >= hours.size()) {
+            vector<string> hours = generateHours(hourLedCnt);
+            if (hours.size() == 0) {
                 break;
             }
             int minuteLedCnt = turnedOn - hourLedCnt;
-            if (minuteLedCnt >= minutes.size()) {
+            vector<string> minutes = generateMinutes(minuteLedCnt);
+            if (minutes.size() == 0) {
                 continue;
             }
-            for (int j = 0; j < hours[hourLedCnt].size(); j++) {
-                for (int k = 0; k < minutes[minuteLedCnt].size(); k++) {
-                    out.push_back(hours[hourLedCnt][j] + minutes[minuteLedCnt][k]);
+            for (int j = 0; j < hours.size(); j++) {
+                for (int k = 0; k < minutes.size(); k++) {
+                    out.push_back(hours[j] + minutes[k]);
                 }
             }
         }
