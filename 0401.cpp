@@ -40,50 +40,35 @@ Constraints:
 */
 
 class Solution {
-    vector<string> generateHours(int ledCnt) {
-        switch (ledCnt) {
-            case 0:
-                return {"0:"};
-            case 1:
-                return {"1:", "2:", "4:", "8:"};
-            case 2:
-                return {"3:", "5:", "6:", "9:", "10:"};
-            case 3:
-                return {"7:", "11:"};
-            default:
-                break;
+    vector<string> generateValues(int targetBits, bool isMinute) {
+        vector<string> result;
+        int maxVal = 0;
+        if (isMinute) {
+            maxVal = 59;
+        } else {
+            maxVal = 11;
         }
-        return vector<string>{};
-    }
-    vector<string> generateMinutes(int ledCnt) {
-        switch (ledCnt) {
-            case 0:
-                return {"00"};
-            case 1:
-                return {"01", "02", "04", "08", "16", "32"};
-            case 2:
-                return {"03", "05", "06", "09", "10", "12", "17", "18", "20", "24", "33", "34", "36", "40", "48"};
-            case 3:
-                return {"07", "11", "13", "14", "19", "21", "22", "25", "26", "28", "35", "37", "38", "41", "42", "44", "49", "50", "52", "56"};
-            case 4:
-                return {"15", "23", "27", "29", "30", "39", "43", "45", "46", "51", "53", "54", "57", "58"};
-            case 5:
-                return {"31", "47", "55", "59"};
-            default:
-                break;
+        for (int i = 0; i <= maxVal; ++i) {
+            if (__builtin_popcount(i) == targetBits) {
+                string s = to_string(i);
+                if (isMinute) {
+                    result.push_back(i < 10 ? "0" + s : s);
+                } else {
+                    result.push_back(s + ":");
+                }
+            }
         }
-        return vector<string>{};
+        return result;
     }
 public:
     vector<string> readBinaryWatch(int turnedOn) {
         vector<string> out;
         for (int hourLedCnt = 0; hourLedCnt <= turnedOn; hourLedCnt++) {
-            vector<string> hours = generateHours(hourLedCnt);
+            vector<string> hours = generateValues(hourLedCnt, false);
             if (hours.size() == 0) {
                 break;
             }
-            int minuteLedCnt = turnedOn - hourLedCnt;
-            vector<string> minutes = generateMinutes(minuteLedCnt);
+            vector<string> minutes = generateValues(turnedOn - hourLedCnt, true);
             if (minutes.size() == 0) {
                 continue;
             }
