@@ -63,7 +63,6 @@ class Solution {
 public:
     int minOperations(string s, int k) {
         int n = s.size();
-        vector<int> operations(n + 1, INT_MAX); // minium operations to reach state with i zeros
         int zeroCnt = 0;
         for (int i = 0; i < n; i++) {
             if (s[i] == '0') {
@@ -73,23 +72,30 @@ public:
         if (zeroCnt == 0) {
             return 0;
         }
-        queue<int> search;
-        operations[zeroCnt] = 0;
-        search.push(zeroCnt);
+        set<int> unvisited[2];
+        for (int i = 0; i <= n; ++i) {
+            unvisited[i % 2].insert(i);
+        }
+
+        queue<pair<int, int>> search;
+        search.push({zeroCnt, 0});
+        unvisited[zeroCnt % 2].erase(zeroCnt);
+
         while (!search.empty()) {
-            int cur = search.front();
+            pair<int, int> cur = search.front();
             search.pop();
-            int minChagingZeros = max(0, k - (n - cur));
-            int maxChagingZeros = min(k, cur);
-            for (int i = minChagingZeros; i <= maxChagingZeros; i++) {
-                int zeros = cur - i + k - i;
-                if (zeros == 0) {
-                    return operations[cur] + 1;
+
+            int minZeros = cur.first + k - 2 * min(k, cur.first);
+            int maxZeros = cur.first + k - 2 * max(0, k - (n - cur.first));
+            int p = minZeros % 2;
+            set<int>::iterator it = unvisited[p].lower_bound(minZeros);
+            set<int>::iterator it_end = unvisited[p].upper_bound(maxZeros);
+            while (it != it_end) {
+                if (*it == 0) {
+                    return cur.second + 1;
                 }
-                if (operations[zeros] == INT_MAX) {
-                    operations[zeros] = operations[cur] + 1;
-                    search.push(zeros);
-                }
+                search.push({*it, cur.second + 1});
+                it = unvisited[p].erase(it);
             }
         }
         return -1;
