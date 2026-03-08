@@ -40,41 +40,33 @@ Constraints:
 */
 
 class Solution {
+    bool nextString(string& str) {
+        int idx = str.size() - 1;
+        while (str[idx] == '1') {
+            str[idx] = '0';
+            if (idx == 0) {
+                return false;
+            }
+            idx--;
+        }
+        str[idx] = '1';
+        return true;
+    }
 public:
     string findDifferentBinaryString(vector<string>& nums) {
-        vector<string> pstr;
-        pstr.push_back("0");
-        pstr.push_back("1");
-        for (int i = 0; i < nums.size(); ++i)
-        {
-            for (int j = 0; j < pstr.size(); ++j)
-            {
-                bool found = true;
-                for (int k = 0; k < nums.size(); ++k)
-                {
-                    if (nums[k].compare(0, i + 1, pstr[j]) == 0)
-                    {
-                        found = false;
-                        break;
-                    }
-                }
-                if (found)
-                {
-                    int missing_len = nums.size() - pstr[j].size();
-                    for (int k = 0; k < missing_len; ++k)
-                    {
-                        pstr[j].push_back('0');
-                    }
-                    return pstr[j];
+        string out(nums[0].size(), '0');
+        do {
+            bool unique = true;
+            for (int i = 0; i < nums.size(); i++) {
+                if (nums[i] == out) {
+                    unique = false;
+                    break;
                 }
             }
-            int cur_size = pstr.size();
-            for (int j = 0; j < cur_size; ++j)
-            {
-                pstr.push_back(pstr[j] + "1");
-                pstr[j].push_back('0');
+            if (unique) {
+                return out;
             }
-        }
+        } while (nextString(out));
         return "";
     }
 };
