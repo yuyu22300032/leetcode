@@ -39,36 +39,29 @@ Constraints:
 */
 
 class Solution {
-    vector<vector<int>> rotateMatrix(vector<vector<int>>& mat) {
-        const int n = mat.size();
-        vector<vector<int>> out(n, vector<int>(n, 0));
+    void rotateMatrix(vector<vector<int>>& mat) {
+        int n = mat.size();
+
+        // Step 1: Transpose
         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                out[j][n - i -1] = mat[i][j];
+            for (int j = i + 1; j < n; j++) {
+                swap(mat[i][j], mat[j][i]);
             }
         }
-        return move(out);
-    }
-    bool checkMatrixEqual(vector<vector<int>>& mat1, vector<vector<int>>& mat2) {
-        const int n = mat1.size();
+
+        // Step 2: Reverse each row
         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if (mat1[i][j] != mat2[i][j]) {
-                    return false;
-                }
-            }
+            reverse(mat[i].begin(), mat[i].end());
         }
-        return true;
     }
 public:
     bool findRotation(vector<vector<int>>& mat, vector<vector<int>>& target) {
-        int rotateCnt = 0;
-        while (!checkMatrixEqual(mat, target)) {
-            if (++rotateCnt == 4) {
-                return false;
+        for (int i = 0; i < 4; i++) {
+            if (mat == target) {
+                return true;
             }
-            mat = rotateMatrix(mat);
+            rotateMatrix(mat);
         }
-        return true;
+        return false;
     }
 };
