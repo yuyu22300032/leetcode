@@ -1,0 +1,84 @@
+/*
+3740. Minimum Distance Between Three Equal Elements I
+
+
+Description:
+
+You are given an integer array nums.
+
+A tuple (i, j, k) of 3 distinct indices is good if nums[i] == nums[j] == nums[k].
+
+The distance of a good tuple is abs(i - j) + abs(j - k) + abs(k - i), where abs(x) denotes the absolute value of x.
+
+Return an integer denoting the minimum possible distance of a good tuple. If no good tuples exist, return -1.
+
+ 
+
+Example 1:
+
+Input: nums = [1,2,1,1,3]
+
+Output: 6
+
+Explanation:
+
+The minimum distance is achieved by the good tuple (0, 2, 3).
+
+(0, 2, 3) is a good tuple because nums[0] == nums[2] == nums[3] == 1. Its distance is abs(0 - 2) + abs(2 - 3) + abs(3 - 0) = 2 + 1 + 3 = 6.
+
+Example 2:
+
+Input: nums = [1,1,2,3,2,1,2]
+
+Output: 8
+
+Explanation:
+
+The minimum distance is achieved by the good tuple (2, 4, 6).
+
+(2, 4, 6) is a good tuple because nums[2] == nums[4] == nums[6] == 2. Its distance is abs(2 - 4) + abs(4 - 6) + abs(6 - 2) = 2 + 2 + 4 = 8.
+
+Example 3:
+
+Input: nums = [1]
+
+Output: -1
+
+Explanation:
+
+There are no good tuples. Therefore, the answer is -1.
+
+ 
+
+Constraints:
+
+    1 <= n == nums.length <= 100
+    1 <= nums[i] <= n
+
+
+*/
+
+class Solution {
+public:
+    int minimumDistance(vector<int>& nums) {
+        int out = INT_MAX;
+        unordered_map<int, pair<int, int>> numIdxs;
+        for (int i = 0; i < nums.size(); i++) {
+            unordered_map<int, pair<int, int>>::iterator it = numIdxs.find(nums[i]);
+            if (it == numIdxs.end()) {
+                numIdxs[nums[i]] = {i, -1};
+            } else if (it->second.second == -1) {
+                it->second.second = i;
+            } else {
+                int dist = abs(i - it->second.second) + abs(i - it->second.first) + abs(it->second.first - it->second.second);
+                out = min(out, dist);
+                it->second.first = it->second.second;
+                it->second.second = i;
+            }
+        }
+        if (out == INT_MAX) {
+            out = -1;
+        }
+        return out;
+    }
+};
