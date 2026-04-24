@@ -65,4 +65,3 @@ public:
         return move(out);
     }
 };
-
