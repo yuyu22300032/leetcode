@@ -45,16 +45,9 @@ public:
     vector<int> separateDigits(vector<int>& nums) {
         vector<int> out;
         for (int i = 0; i < nums.size(); i++) {
-            stack<int> digits;
-            int cur = nums[i];
-            while (cur > 0) {
-                int digit = cur % 10;
-                cur = (cur - digit) / 10;
-                digits.push(digit);
-            }
-            while (!digits.empty()) {
-                out.push_back(digits.top());
-                digits.pop();
+            string s = to_string(nums[i]);
+            for (int j = 0; j < s.size(); j++) {
+                out.push_back(s[j] - '0');
             }
         }
         return out;
