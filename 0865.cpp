@@ -75,7 +75,7 @@ class Solution {
 public:
     TreeNode* subtreeWithAllDeepest(TreeNode* root) {
         vector<TreeNode*> nodes;
-        unordered_map<int, TreeNode*> r_map;
+        vector<TreeNode*> r_map(501);
         queue<TreeNode*> search;
         search.push(root);
         while (! search.empty()) {
