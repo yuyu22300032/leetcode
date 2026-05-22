@@ -74,43 +74,37 @@ Note: This question is the same as 1123: https://leetcode.com/problems/lowest-co
 class Solution {
 public:
     TreeNode* subtreeWithAllDeepest(TreeNode* root) {
-        list<TreeNode*> deepest_nodes;
-        unordered_map<TreeNode*, TreeNode*> r_map;
+        vector<TreeNode*> nodes;
+        unordered_map<int, TreeNode*> r_map;
         queue<TreeNode*> search;
         search.push(root);
         while (! search.empty()) {
-            deepest_nodes.clear();
+            nodes.clear();
             int cur_layer_cnt = search.size();
             for (int i = 0; i < cur_layer_cnt; i++) {
                 TreeNode* node = search.front();
                 search.pop();
-                deepest_nodes.push_back(node);
+                nodes.push_back(node);
                 if (node->left != nullptr) {
                     search.push(node->left);
-                    r_map[node->left] = node;
+                    r_map[node->left->val] = node;
                 }
                 if (node->right != nullptr) {
                     search.push(node->right);
-                    r_map[node->right] = node;
+                    r_map[node->right->val] = node;
                 }
             }
         }
-        while (deepest_nodes.size() > 1) {
-            for (list<TreeNode*>::iterator it = deepest_nodes.begin(); it != deepest_nodes.end(); it++) {
-                *it = r_map[*it];
-            }
-            list<TreeNode*>::iterator it = deepest_nodes.begin();
-            list<TreeNode*>::iterator prev = deepest_nodes.begin();
-            it++;
-            while (it != deepest_nodes.end()) {
-                if (*it == *prev) {
-                    it = deepest_nodes.erase(it);
-                } else {
-                    prev = it;
-                    it++;
+        while (nodes.size() > 1) {
+            vector<TreeNode*> parent_nodes;
+            parent_nodes.push_back(r_map[nodes[0]->val]);
+            for (int i = 1; i < nodes.size(); i++) {
+                if (r_map[nodes[i]->val] != parent_nodes.back()) {
+                    parent_nodes.push_back(r_map[nodes[i]->val]);
                 }
             }
+            nodes = parent_nodes;
         }
-        return deepest_nodes.front();
+        return nodes[0];
     }
 };
