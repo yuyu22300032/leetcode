@@ -45,25 +45,20 @@ class Solution {
             return;
         }
         map<int, int>::iterator it = range.lower_bound(start);
-        if (it == range.end()) {
-            it--;
-            if (it->second >= start) {
-                it->second = end;
-            } else {
-                range[start] = end;
+        if (it != range.end()) {
+            if (it->first == start) {
+                it->second = max(it->second, end);
+                return;
             }
-        } else if (it->first == start) {
-            it->second = max(it->second, end);
-        } else {
             if (it->first <= end) {
                 end = it->second;
             }
-            it--;
-            if (it->second >= start) {
-                it->second = end;
-            } else {
-                range[start] = end;
-            }
+        }
+        it--;
+        if (it->second >= start) {
+            it->second = end;
+        } else {
+            range[start] = end;
         }
     }
     bool inRange(map<int, int>& range, int key) {
@@ -72,27 +67,24 @@ class Solution {
             return false;
         }
         it--;
-        if (it->first > key) {
-            return false;
-        }
-        if (it->second >= key) {
+        if (it->first <= key && it->second >= key) {
             return true;
         }
         return false;
     }
 public:
     bool canReach(string s, int minJump, int maxJump) {
+        int end_idx = s.size() - 1;
+        if (s[end_idx] != '0') {
+            return false;
+        }
         map<int, int> range;
         updateRange(range, minJump, maxJump);
-        int end_idx = s.size() - 1;
         for (int i = 1; i < end_idx; i++) {
             if (s[i] == '0' && inRange(range, i)) {
                 updateRange(range, i + minJump, i + maxJump);
             }
         }
-        if (s[end_idx] == '0' && inRange(range, end_idx)) {
-            return true;
-        }
-        return false;
+        return inRange(range, end_idx);
     }
 };
