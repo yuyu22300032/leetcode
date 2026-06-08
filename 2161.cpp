@@ -47,38 +47,23 @@ Constraints:
 class Solution {
 public:
     vector<int> pivotArray(vector<int>& nums, int pivot) {
-        vector<int> out(nums.size());
-        int idx = 0;
-        int equal_cnt = 0;
-        int greater_cnt = 0;
-        for (int i = 0; i < nums.size(); i++)
-        {
-            if (nums[i] < pivot)
-            {
-                out[idx] = nums[i];
-                idx++;
-            }
-            else if (nums[i] == pivot)
-            {
-                equal_cnt++;
-            }
-            else
-            {
-                nums[greater_cnt] = nums[i];
-                greater_cnt++;
+        vector<int> out;
+        for (int i = 0; i < nums.size(); i++) {
+            if (nums[i] < pivot) {
+                out.push_back(nums[i]);
             }
         }
-        for (int i = 0; i < equal_cnt; ++i)
-        {
-            out[idx] = pivot;
-            idx++;
+        for (int i = 0; i < nums.size(); i++) {
+            if (nums[i] == pivot) {
+                out.push_back(nums[i]);
+            }
         }
-        for (int i = 0; i < greater_cnt; ++i)
-        {
-            out[idx] = nums[i];
-            idx++;
+        for (int i = 0; i < nums.size(); i++) {
+            if (nums[i] > pivot) {
+                out.push_back(nums[i]);
+            }
         }
-        return out;
+        return move(out);
     }
 };
 
