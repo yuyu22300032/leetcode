@@ -63,17 +63,33 @@ Constraints:
 class Solution {
 public:
     int pairSum(ListNode* head) {
+        // count list node size
+        int cnt = 0;
         ListNode* cur = head;
-        vector<int> vals;
         while (cur != nullptr) {
-            vals.push_back(cur->val);
+            cnt++;
             cur = cur->next;
         }
-        int out = INT_MIN;
-        int idx1 = 0;
-        int idx2 = vals.size() - 1;
-        while (idx1 < idx2) {
-            out = max(out, vals[idx1++] + vals[idx2--]);
+        // reverse second half
+        cur = head;
+        for (int i = 0; i < cnt / 2; i++) {
+            cur = cur->next;
+        }
+        ListNode* prev = nullptr;
+        while (cur != nullptr) {
+            ListNode* tmp_node = cur->next;
+            cur->next = prev;
+            prev = cur;
+            cur = tmp_node;
+        }
+        ListNode* rev_cur = prev;
+        // find max pair sum
+        int out = 0;
+        cur = head;
+        while (rev_cur != nullptr) {
+            out = max(out, cur->val + rev_cur->val);
+            cur = cur->next;
+            rev_cur = rev_cur->next;
         }
         return out;
     }
