@@ -43,21 +43,17 @@ Constraints:
 class Solution {
 public:
     vector<int> arrayRankTransform(vector<int>& arr) {
-        multimap<int, int> sorted;
+        map<int, vector<int>> sorted;
         for (int i = 0; i < arr.size(); i++) {
-            sorted.insert(pair<int, int>{arr[i], i});
+            sorted[arr[i]].push_back(i);
         }
         int rank = 1;
         vector<int> out(arr.size());
-        multimap<int, int>::iterator it = sorted.begin();
-        int prev_val = it->first;
-        while (it != sorted.end()) {
-            if (prev_val != it->first) {
-                prev_val = it->first;
-                rank++;
+        for(map<int, vector<int>>::iterator it = sorted.begin(); it != sorted.end(); it++) {
+            for (int i = 0; i < it->second.size(); i++) {
+                out[it->second[i]] = rank;
             }
-            out[it->second] = rank;
-            it++;
+            rank++;
         }
         return move(out);
     }
