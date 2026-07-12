@@ -43,17 +43,20 @@ Constraints:
 class Solution {
 public:
     vector<int> arrayRankTransform(vector<int>& arr) {
-        map<int, vector<int>> sorted;
-        for (int i = 0; i < arr.size(); i++) {
-            sorted[arr[i]].push_back(i);
-        }
-        int rank = 1;
-        vector<int> out(arr.size());
-        for(map<int, vector<int>>::iterator it = sorted.begin(); it != sorted.end(); it++) {
-            for (int i = 0; i < it->second.size(); i++) {
-                out[it->second[i]] = rank;
+        vector<int> sorted(arr);
+        sort(sorted.begin(), sorted.end());
+        unordered_map<int, int> ranks;
+        int rank = 0;
+        for (int i = 0; i < sorted.size(); i++) {
+            if ((i > 0) && (sorted[i] == sorted[i - 1])) {
+                continue;
             }
             rank++;
+            ranks[sorted[i]] = rank;
+        }
+        vector<int> out(arr.size());
+        for (int i = 0; i < arr.size(); i++) {
+            out[i] = ranks[arr[i]];
         }
         return move(out);
     }
